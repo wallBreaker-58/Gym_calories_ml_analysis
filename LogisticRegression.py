@@ -48,3 +48,40 @@ model.fit(X_train, y_train)
 y_pred = model.predict(X_test)
 y_prob = model.predict_proba(X_test)
 
+# Step 7: Evaluate model
+accuracy = accuracy_score(y_test, y_pred)
+loss = log_loss(y_test, y_prob)
+matrix = confusion_matrix(y_test, y_pred)
+
+print("LOGISTIC REGRESSION RESULTS")
+print("---------------------------")
+print("Accuracy:", round(accuracy, 4))
+print("Log Loss:", round(loss, 4))
+print("Confusion Matrix:\n", matrix)
+print("\nClassification Report:\n")
+print(classification_report(
+    y_test, y_pred,
+    target_names=['Low Calories', 'High Calories']
+))
+
+# Step 8: Calculate AUC
+auc = roc_auc_score(y_test, y_prob[:, 1])
+print("ROC-AUC Score:", round(auc, 4))
+
+# Step 9: Plot confusion matrix
+plt.figure(figsize=(6, 5))
+plt.imshow(matrix)
+plt.title('Logistic Regression - Confusion Matrix')
+plt.xlabel('Predicted Class')
+plt.ylabel('Actual Class')
+plt.xticks([0, 1], ['Low', 'High'])
+plt.yticks([0, 1], ['Low', 'High'])
+
+for i in range(2):
+    for j in range(2):
+        plt.text(j, i, matrix[i, j], ha='center', va='center')
+
+plt.colorbar()
+plt.tight_layout()
+plt.show()
+
